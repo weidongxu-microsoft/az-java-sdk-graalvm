@@ -9,7 +9,7 @@ import com.azure.core.management.exception.ManagementException;
 import com.azure.core.management.profile.AzureProfile;
 import com.azure.core.util.logging.ClientLogger;
 import com.azure.identity.DefaultAzureCredentialBuilder;
-import com.azure.resourcemanager.containerinstance.ContainerInstanceManager;
+import com.azure.resourcemanager.AzureResourceManager;
 import com.azure.resourcemanager.containerinstance.models.ContainerGroup;
 
 public class Main {
@@ -21,10 +21,11 @@ public class Main {
         AzureProfile profile = new AzureProfile(AzureEnvironment.AZURE);
         TokenCredential credential = new DefaultAzureCredentialBuilder().build();
 
-        ContainerInstanceManager manager = ContainerInstanceManager
+        AzureResourceManager manager = AzureResourceManager
                 .configure()
                 .withLogOptions(new HttpLogOptions().setLogLevel(HttpLogDetailLevel.BODY_AND_HEADERS))
-                .authenticate(credential, profile);
+                .authenticate(credential, profile)
+                .withDefaultSubscription();
 
         String rgName = "rg1-weidxu";
 
@@ -57,7 +58,7 @@ public class Main {
             manager.containerGroups().deleteById(containerGroup.id());
             System.out.println("container group deleted: " + containerGroup.name());
         } finally {
-            manager.resourceManager().resourceGroups().deleteByName(rgName);
+            manager.resourceGroups().deleteByName(rgName);
         }
 
         // a case for exception
