@@ -16,7 +16,7 @@ public class Main {
 
     private static final ClientLogger logger = new ClientLogger(Main.class);
 
-    public static void main(String args[]) {
+    public static void main(String ...args) {
 
         AzureProfile profile = new AzureProfile(AzureEnvironment.AZURE);
         TokenCredential credential = new DefaultAzureCredentialBuilder().build();
